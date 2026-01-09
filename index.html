@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Niba | The Hive Resonance</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;700&family=Instrument+Serif:italic@0;1&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            background: #050401; 
+            color: #fef3c7; 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            overflow-x: hidden;
+        }
+        .serif { font-family: 'Instrument Serif', serif; }
+        
+        /* Hexagonal Grid Background */
+        .hex-bg {
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='104' viewBox='0 0 60 104' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 104L0 86.6667V51.3333L30 34L60 51.3333V86.6667L30 104ZM30 70L15 61.3333V44L30 35.3333L45 44V61.3333L30 70Z' fill='%23fbbf24' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E");
+            z-index: 1;
+        }
+
+        /* Golden Pulse Visualizer */
+        .honey-bar {
+            transition: height 0.3s ease, background-color 0.5s ease;
+            filter: blur(8px);
+            border-radius: 4px;
+            width: 12px;
+            background: #fbbf24;
+            box-shadow: 0 0 20px rgba(251, 191, 36, 0.4);
+        }
+
+        .glass-amber { 
+            background: rgba(251, 191, 36, 0.05); 
+            border: 1px solid rgba(251, 191, 36, 0.1); 
+            backdrop-filter: blur(15px); 
+        }
+
+        .btn-gold {
+            background: #fbbf24;
+            color: #050401;
+            box-shadow: 0 0 30px rgba(251, 191, 36, 0.2);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="hex-bg"></div>
+
+    <nav class="fixed w-full z-50 p-8 flex justify-between items-center">
+        <div class="serif text-2xl tracking-widest text-amber-200/80 uppercase">NIBA HIVE</div>
+        <div class="text-[10px] tracking-[0.3em] uppercase text-amber-500/60">Apitherapy Acoustic</div>
+    </nav>
+
+    <section class="min-h-screen flex flex-col items-center justify-center px-6 text-center relative z-10">
+        <h1 class="text-6xl md:text-8xl serif mb-6 text-amber-50 leading-tight">
+            The Living <br><span class="italic text-amber-400">Resonance.</span>
+        </h1>
+        <p class="text-amber-100/40 max-w-lg text-lg mb-12 font-light">
+            Sleep within the frequency of the colony. A biologically-synced soundscape from our Port Perry hives.
+        </p>
+    </section>
+
+    <section class="py-20 px-6 relative z-10">
+        <div class="max-w-4xl mx-auto text-center">
+            
+            <div id="visualizer" class="flex items-end justify-center gap-2 h-48 mb-16">
+                </div>
+
+            <div class="glass-amber p-10 rounded-[60px] max-w-md mx-auto relative overflow-hidden">
+                <div id="status" class="text-[10px] uppercase tracking-[0.4em] text-amber-500/60 mb-8">System: Dormant</div>
+                
+                <div class="flex flex-col gap-4 mb-10">
+                    <button onclick="setMode('recorded')" id="recordedBtn" class="py-4 rounded-full border border-amber-500/20 text-xs tracking-widest uppercase bg-amber-500/10 transition-all">
+                        Hive Archive (Adaptive)
+                    </button>
+                    <button onclick="setMode('live')" id="liveBtn" class="py-4 rounded-full border border-amber-500/20 text-xs tracking-widest uppercase opacity-50 cursor-not-allowed">
+                        Listen Live (Hive-Share Only)
+                    </button>
+                </div>
+
+                <button id="mainToggle" class="w-full py-6 btn-gold rounded-full font-bold text-lg uppercase tracking-wider hover:scale-105 transition-all">
+                    Connect to Hive
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-32 px-6 relative z-10 text-center">
+        <div class="max-w-xl mx-auto">
+            <h2 class="serif text-4xl mb-6 italic">Support the Colony</h2>
+            <p class="text-amber-100/60 text-sm mb-12 leading-relaxed">
+                Our "Hive Share" program supports the ongoing health, medicine, and winter-proofing of our Port Perry bees. Supporters unlock 24/7 Live Stream access and seasonal honey rewards.
+            </p>
+            <a href="https://buymeacoffee.com/niba" target="_blank" class="px-12 py-5 border border-amber-400 text-amber-400 rounded-full font-bold uppercase tracking-widest text-xs hover:bg-amber-400 hover:text-black transition-all">
+                Become a Hive Sharer
+            </a>
+        </div>
+    </section>
+
+    <audio id="hiveAudio" loop crossorigin="anonymous">
+        <source src="hive-hum.mp3" type="audio/mpeg">
+    </audio>
+
+    <footer class="py-20 text-center relative z-10 opacity-30 text-[10px] tracking-[0.5em] uppercase">
+        NIBA APITHERAPY • PORT PERRY
+    </footer>
+
+    <script>
+        let audioCtx, analyser, mic, source, gainNode, script;
+        const audio = document.getElementById('hiveAudio');
+        const toggle = document.getElementById('mainToggle');
+        const viz = document.getElementById('visualizer');
+
+        // Build Bars
+        for(let i=0; i<15; i++) {
+            let bar = document.createElement('div');
+            bar.className = 'honey-bar';
+            bar.style.height = '10%';
+            viz.appendChild(bar);
+        }
+        const bars = document.querySelectorAll('.honey-bar');
+
+        function setMode(mode) {
+            if(mode === 'live') {
+                alert("The Live Stream is available for Hive-Share supporters once the spring season opens.");
+            }
+        }
+
+        toggle.addEventListener('click', async () => {
+            if (audioCtx) { location.reload(); return; }
+            
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            
+            source = audioCtx.createMediaElementSource(audio);
+            analyser = audioCtx.createAnalyser();
+            mic = audioCtx.createMediaStreamSource(stream);
+            gainNode = audioCtx.createGain();
+            script = audioCtx.createScriptProcessor(2048, 1, 1);
+
+            analyser.fftSize = 256;
+            source.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            mic.connect(analyser);
+            analyser.connect(script);
+            script.connect(audioCtx.destination);
+
+            audio.play();
+            gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
+            document.getElementById('status').innerText = "Frequency: Syncing with Hive";
+            toggle.innerText = "End Connection";
+
+            script.onaudioprocess = () => {
+                const data = new Uint8Array(analyser.frequencyBinCount);
+                analyser.getByteFrequencyData(data);
+                let volume = 0;
+
+                for (let i = 0; i < bars.length; i++) {
+                    let val = data[i * 2] || 0;
+                    if(val > volume) volume = val;
+                    bars[i].style.height = Math.max(10, (val/255)*100) + '%';
+                    // Glow changes with intensity
+                    bars[i].style.boxShadow = `0 0 30px rgba(251, 191, 36, ${val/255})`;
+                }
+
+                // Adaptive Volume Swell
+                if (volume > 45) {
+                    gainNode.gain.setTargetAtTime(0.8, audioCtx.currentTime, 0.1);
+                } else {
+                    gainNode.gain.setTargetAtTime(0.2, audioCtx.currentTime, 1.0);
+                }
+            };
+        });
+    </script>
+</body>
+</html>
