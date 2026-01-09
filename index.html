@@ -7,7 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;700&family=Instrument+Serif:italic@0;1&display=swap" rel="stylesheet">
     <style>
-        /* Deep Warm Obsidian Background */
         body { 
             background: #070502; 
             color: #fef3c7; 
@@ -18,28 +17,25 @@
 
         .serif { font-family: 'Instrument Serif', serif; }
         
-        /* Subtle Hexagonal "Hive Wall" Background */
+        /* Prominent Hexagonal Hive Background */
         .hive-walls {
             position: fixed;
             inset: 0;
-            /* This creates a seamless, very dark golden hexagonal mesh */
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='100' viewBox='0 0 56 100'%3E%3Cpath d='M28 66L0 50L0 16L28 0L56 16L56 50L28 66ZM28 100L0 84L0 50L28 66L56 50L56 84L28 100Z' fill='%23fbbf24' fill-opacity='0.02' fill-rule='evenodd'/%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='140' viewBox='0 0 80 140'%3E%3Cpath d='M40 92L0 70V23L40 0L80 23V70L40 92ZM40 140L0 118V70L40 92L80 70V118L40 140Z' fill='%23fbbf24' fill-opacity='0.08' fill-rule='evenodd'/%3E%3C/svg%3E");
             z-index: 1;
             pointer-events: none;
         }
 
-        /* Ambient Amber Glow from the corners */
         .hive-glow {
             position: fixed;
             width: 100vw;
             height: 100vh;
-            background: radial-gradient(circle at 50% -20%, rgba(251, 191, 36, 0.08) 0%, transparent 50%),
+            background: radial-gradient(circle at 50% -20%, rgba(251, 191, 36, 0.1) 0%, transparent 50%),
                         radial-gradient(circle at 50% 120%, rgba(251, 191, 36, 0.05) 0%, transparent 50%);
             z-index: 2;
             pointer-events: none;
         }
 
-        /* Golden Pulse Visualizer */
         .honey-bar {
             transition: height 0.3s ease, background-color 0.5s ease;
             filter: blur(6px);
@@ -50,26 +46,18 @@
         }
 
         .glass-amber { 
-            background: rgba(15, 10, 5, 0.6); 
-            border: 1px solid rgba(251, 191, 36, 0.08); 
+            background: rgba(15, 10, 5, 0.8); 
+            border: 1px solid rgba(251, 191, 36, 0.15); 
             backdrop-filter: blur(20px); 
         }
 
         .btn-gold {
             background: #fbbf24;
             color: #070502;
-            box-shadow: 0 10px 40px rgba(251, 191, 36, 0.15);
+            box-shadow: 0 10px 40px rgba(251, 191, 36, 0.2);
         }
 
-        .btn-gold:hover {
-            background: #fff;
-            transform: translateY(-2px);
-        }
-
-        footer a:hover {
-            color: #fbbf24;
-            letter-spacing: 0.5em;
-        }
+        .btn-gold:hover { background: #fff; transform: translateY(-2px); }
     </style>
 </head>
 <body class="antialiased">
@@ -89,20 +77,17 @@
         <p class="text-amber-100/40 max-w-lg text-lg mb-12 font-light leading-relaxed">
             Rest within the frequency of the colony. A biologically-synced shield of sound from the heart of our hives.
         </p>
-        <a href="#control" class="text-amber-400/60 text-[10px] uppercase tracking-[0.5em] animate-pulse">Scroll to Listen</a>
     </section>
 
     <section id="control" class="py-20 px-6 relative z-10">
         <div class="max-w-4xl mx-auto text-center">
-            
-            <div id="visualizer" class="flex items-end justify-center gap-2 h-48 mb-20">
-                </div>
+            <div id="visualizer" class="flex items-end justify-center gap-2 h-48 mb-20"></div>
 
             <div class="glass-amber p-10 rounded-[60px] max-w-md mx-auto relative">
                 <div id="status" class="text-[10px] uppercase tracking-[0.4em] text-amber-500/60 mb-8">Connection: Dormant</div>
                 
                 <div class="flex flex-col gap-4 mb-10">
-                    <button onclick="setMode('recorded')" id="recordedBtn" class="py-4 rounded-full border border-amber-500/30 text-xs tracking-widest uppercase bg-amber-500/10 text-amber-200 transition-all">
+                    <button onclick="setMode('recorded')" id="recordedBtn" class="py-4 rounded-full border border-amber-500/30 text-xs tracking-widest uppercase bg-amber-500/10 text-amber-200">
                         Hive Archive (Adaptive)
                     </button>
                     <button onclick="setMode('live')" id="liveBtn" class="py-4 rounded-full border border-white/5 text-xs tracking-widest uppercase opacity-40 cursor-not-allowed">
@@ -124,13 +109,13 @@
                 <div>
                     <h4 class="text-amber-400 uppercase text-[10px] tracking-widest font-bold mb-4">The Landscape</h4>
                     <p class="text-sm text-amber-100/60 leading-relaxed font-light">
-                        Our bees forage the Oak Ridges Moraine, gathering nectar from basswood and wild clover. This diverse ecosystem produces a healthy, high-vibration colony that resonates with life.
+                        Our bees forage the Oak Ridges Moraine, gathering nectar from basswood and wild clover. This ecosystem produces a high-vibration colony that resonates with life.
                     </p>
                 </div>
                 <div>
                     <h4 class="text-amber-400 uppercase text-[10px] tracking-widest font-bold mb-4">The Frequency</h4>
                     <p class="text-sm text-amber-100/60 leading-relaxed font-light">
-                        The hive thrums at a steady $200\text{Hz}$ frequency that mirrors human Theta brainwaves, signaling the nervous system to let go of the day and drift into deep, rhythmic rest.
+                        The hive thrums at a steady 200Hz frequency that mirrors human Theta brainwaves, signaling the nervous system to let go of the day and drift into deep rest.
                     </p>
                 </div>
             </div>
@@ -141,7 +126,7 @@
         <div class="max-w-xl mx-auto">
             <h2 class="serif text-4xl mb-6 italic text-amber-50">Support the Colony</h2>
             <p class="text-amber-100/60 text-sm mb-12 leading-relaxed font-light">
-                Our <strong>Hive Guardian</strong> program supports the health, medicine, and winter-proofing of our Port Perry bees. Guardians unlock exclusive 24/7 Live Stream access and seasonal honey rewards.
+                Our Hive Guardian program supports the health and winter-proofing of our Port Perry bees.
             </p>
             <a href="https://buymeacoffee.com/niba" target="_blank" class="px-12 py-5 border border-amber-400 text-amber-400 rounded-full font-bold uppercase tracking-widest text-xs hover:bg-amber-400 hover:text-black transition-all">
                 Become a Hive Guardian
@@ -149,25 +134,26 @@
         </div>
     </section>
 
-    <audio id="hiveAudio" loop crossorigin="anonymous">
-        <source src="hive-hum.mp3" type="audio/mpeg">
-    </audio>
-
-    <footer class="py-20 text-center relative z-10">
-        <div class="text-[10px] text-amber-100/20 uppercase tracking-[0.5em] transition-all cursor-default">
+    <footer class="py-20 text-center relative z-10 flex flex-col gap-6">
+        <a href="https://[YOUR-GITHUB-USERNAME].github.io/niba/" class="text-amber-400/80 text-[10px] uppercase tracking-[0.3em] hover:text-white transition-all">
+            Switch to Niba Classic (Rain Canopy) →
+        </a>
+        <div class="text-[9px] text-amber-100/20 uppercase tracking-[0.5em]">
             &copy; 2026 NIBA APITHERAPY • PORT PERRY, ONTARIO
         </div>
     </footer>
 
     <script>
-        let audioCtx, analyser, mic, source, gainNode, script;
-        const audio = document.getElementById('hiveAudio');
+        let audioCtx, analyser, mic, gainNode, script;
         const toggle = document.getElementById('mainToggle');
         const viz = document.getElementById('visualizer');
+        
+        // Gapless Dual-Buffer
+        const audioFiles = ['hive-hum.mp3', 'hive-hum.mp3'];
+        const players = [new Audio(audioFiles[0]), new Audio(audioFiles[1])];
+        players.forEach(p => { p.crossOrigin = "anonymous"; p.preload = "auto"; });
 
-        // Create 20 Bars for the visualizer
-        const barCount = 20;
-        for(let i=0; i < barCount; i++) {
+        for(let i=0; i < 20; i++) {
             let bar = document.createElement('div');
             bar.className = 'honey-bar';
             bar.style.height = '12%';
@@ -175,75 +161,55 @@
         }
         const bars = document.querySelectorAll('.honey-bar');
 
-        function setMode(mode) {
-            if(mode === 'live') {
-                alert("The Live Stream is currently resting. It will be available for Hive Guardians once the spring nectar flow begins.");
-            }
-        }
-
-        toggle.addEventListener('click', async () => {
-            if (audioCtx) { location.reload(); return; }
+        async function initAudio() {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
             
-            try {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                
-                source = audioCtx.createMediaElementSource(audio);
-                analyser = audioCtx.createAnalyser();
-                mic = audioCtx.createMediaStreamSource(stream);
-                gainNode = audioCtx.createGain();
-                script = audioCtx.createScriptProcessor(2048, 1, 1);
+            const s1 = audioCtx.createMediaElementSource(players[0]);
+            const s2 = audioCtx.createMediaElementSource(players[1]);
+            analyser = audioCtx.createAnalyser();
+            mic = audioCtx.createMediaStreamSource(stream);
+            gainNode = audioCtx.createGain();
+            script = audioCtx.createScriptProcessor(2048, 1, 1);
 
-                analyser.fftSize = 512;
-                analyser.smoothingTimeConstant = 0.8;
+            s1.connect(gainNode); s2.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            mic.connect(analyser); analyser.connect(script);
+            script.connect(audioCtx.destination);
 
-                source.connect(gainNode);
-                gainNode.connect(audioCtx.destination);
-                mic.connect(analyser);
-                analyser.connect(script);
-                script.connect(audioCtx.destination);
-
-                await audioCtx.resume();
-                audio.play();
-                
-                // Baseline volume for the hum
-                gainNode.gain.setValueAtTime(0.18, audioCtx.currentTime);
-                document.getElementById('status').innerText = "Status: Connected to Colony";
-                document.getElementById('status').style.color = "#fbbf24";
-                toggle.innerText = "Disconnect";
-
-                script.onaudioprocess = () => {
-                    const data = new Uint8Array(analyser.frequencyBinCount);
-                    analyser.getByteFrequencyData(data);
-                    let maxVol = 0;
-
-                    for (let i = 0; i < bars.length; i++) {
-                        let val = data[i * 4] || 0;
-                        if(val > maxVol) maxVol = val;
-                        
-                        // Bar height responds to room noise
-                        let height = Math.max(12, (val/255)*120);
-                        bars[i].style.height = height + '%';
-                        
-                        // Dynamic glow intensity
-                        let opacity = 0.2 + (val/255);
-                        bars[i].style.backgroundColor = `rgba(251, 191, 36, ${opacity})`;
-                        bars[i].style.boxShadow = `0 0 30px rgba(251, 191, 36, ${val/300})`;
-                    }
-
-                    // ADAPTIVE VOLUME LOGIC
-                    // If room noise is loud (> 45), swell the hive audio to mask it
-                    if (maxVol > 45) {
-                        gainNode.gain.setTargetAtTime(0.75, audioCtx.currentTime, 0.1);
-                    } else {
-                        // Return to soft background levels
-                        gainNode.gain.setTargetAtTime(0.18, audioCtx.currentTime, 1.2);
+            const loop = (idx) => {
+                players[idx].play();
+                players[idx].ontimeupdate = () => {
+                    if (players[idx].duration - players[idx].currentTime < 0.4) {
+                        players[idx].ontimeupdate = null;
+                        loop(1 - idx);
                     }
                 };
-            } catch (err) {
-                alert("To use the Adaptive Canopy, please allow microphone access.");
-            }
+            };
+
+            loop(0);
+            gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
+
+            script.onaudioprocess = () => {
+                const data = new Uint8Array(analyser.frequencyBinCount);
+                analyser.getByteFrequencyData(data);
+                let max = 0;
+                for (let i = 0; i < bars.length; i++) {
+                    let val = data[i * 4] || 0;
+                    if(val > max) max = val;
+                    bars[i].style.height = Math.max(12, (val/255)*120) + '%';
+                }
+                if (max > 45) { gainNode.gain.setTargetAtTime(0.7, audioCtx.currentTime, 0.1); } 
+                else { gainNode.gain.setTargetAtTime(0.2, audioCtx.currentTime, 1.2); }
+            };
+        }
+
+        toggle.addEventListener('click', () => {
+            if (!audioCtx) { initAudio(); toggle.innerText = "Disconnect"; } 
+            else { location.reload(); }
         });
+
+        function setMode(m) { if(m === 'live') alert("The Live Stream opens with the spring nectar flow."); }
     </script>
 </body>
 </html>
