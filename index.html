@@ -9,7 +9,6 @@
     <meta property="og:description" content="Experience the 200Hz frequency of Port Perry honeybees. A biological soundscape for deep rest.">
     <meta property="og:image" content="og-image.jpg">
     <meta property="og:url" content="https://mikestamper2017-design.github.io/niba-hive/">
-    <meta name="twitter:card" content="summary_large_image">
     <link rel="icon" type="image/png" href="og-image.jpg">
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -26,36 +25,17 @@
             overflow-y: auto !important; 
             -webkit-overflow-scrolling: touch;
         }
-
         .serif { font-family: 'Instrument Serif', serif; }
-        
         .hive-walls {
-            position: fixed;
-            inset: 0;
+            position: fixed; inset: 0;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='140' viewBox='0 0 80 140'%3E%3Cpath d='M40 92L0 70V23L40 0L80 23V70L40 92ZM40 140L0 118V70L40 92L80 70V118L40 140Z' fill='%23fbbf24' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
-            z-index: 1;
-            pointer-events: none;
+            z-index: 1; pointer-events: none;
         }
-
-        .honey-bar {
-            transition: height 0.3s ease;
-            filter: blur(4px);
-            border-radius: 4px;
-            width: 12px;
-            background: #fbbf24;
-            box-shadow: 0 0 15px rgba(251, 191, 36, 0.4);
-        }
-
-        /* Increased opacity for glass for better reading */
-        .glass-amber { 
-            background: rgba(20, 15, 5, 0.9); 
-            border: 1px solid rgba(251, 191, 36, 0.2); 
-            backdrop-filter: blur(20px); 
-        }
+        .honey-bar { transition: height 0.3s ease; filter: blur(4px); border-radius: 4px; width: 12px; background: #fbbf24; box-shadow: 0 0 15px rgba(251, 191, 36, 0.4); }
+        .glass-amber { background: rgba(20, 15, 5, 0.9); border: 1px solid rgba(251, 191, 36, 0.2); backdrop-filter: blur(20px); }
     </style>
 </head>
 <body class="antialiased">
-
     <div class="hive-walls"></div>
 
     <nav class="fixed w-full z-[100] p-6 flex justify-between items-center bg-gradient-to-b from-[#070502] via-[#070502]/80 to-transparent">
@@ -73,35 +53,57 @@
     </nav>
 
     <main class="relative z-10">
-        
         <section class="min-h-screen flex flex-col items-center justify-center px-6 pt-40 text-center">
-            <h1 class="text-6xl md:text-8xl serif mb-6 text-amber-50 leading-tight">
-                The Living <br><span class="italic text-amber-400">Resonance.</span>
-            </h1>
-            <p class="text-amber-100/70 max-w-lg text-xl mb-12 font-light leading-relaxed">
-                Rest within the frequency of the colony. A biologically-synced shield of sound from the heart of our hives.
-            </p>
+            <h1 class="text-6xl md:text-8xl serif mb-6 text-amber-50 leading-tight">The Living <br><span class="italic text-amber-400">Resonance.</span></h1>
+            <p class="text-amber-100/70 max-w-lg text-xl mb-12 font-light leading-relaxed">Rest within the frequency of the colony. A biologically-synced shield of sound from the heart of our hives.</p>
             <div class="animate-bounce text-amber-500/50 text-xs tracking-[0.4em] uppercase font-bold">Scroll to Connect</div>
         </section>
 
         <section id="control" class="py-24 px-6">
             <div class="max-w-4xl mx-auto text-center">
                 <div id="visualizer" class="flex items-end justify-center gap-2 h-32 mb-16"></div>
-                
                 <div class="glass-amber p-10 rounded-[50px] max-w-md mx-auto relative shadow-2xl">
                     <div class="flex flex-col gap-3 mb-8">
-                        <button onclick="setMode('recorded')" id="recordedBtn" class="py-4 rounded-full border border-amber-500/60 text-xs tracking-widest uppercase bg-amber-500/20 text-amber-100 font-bold transition-all">
-                            Hive Archive (Adaptive)
-                        </button>
-                        <button onclick="setMode('live')" id="liveBtn" class="py-4 rounded-full border border-white/10 text-xs tracking-widest uppercase opacity-40 font-bold">
-                            Listen Live (Guardians Only)
-                        </button>
+                        <button onclick="setMode('recorded')" id="recordedBtn" class="py-4 rounded-full border border-amber-500/60 text-xs tracking-widest uppercase bg-amber-500/20 text-amber-100 font-bold transition-all">Hive Archive (Adaptive)</button>
+                        <button onclick="setMode('live')" id="liveBtn" class="py-4 rounded-full border border-white/10 text-xs tracking-widest uppercase opacity-40 font-bold">Listen Live (Guardians Only)</button>
                     </div>
-
-                    <button id="mainToggle" class="w-full py-6 bg-amber-400 text-black rounded-full font-black uppercase tracking-widest hover:bg-white transition-all text-sm">
-                        Connect to Hive
-                    </button>
+                    <button id="mainToggle" class="w-full py-6 bg-amber-400 text-black rounded-full font-black uppercase tracking-widest hover:bg-white transition-all text-sm">Connect to Hive</button>
                     <p id="status" class="mt-6 text-[11px] uppercase tracking-widest text-amber-500/70 font-black">Status: Offline</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-24 px-6 bg-black/30">
+            <div class="max-w-4xl mx-auto">
+                <div class="glass-amber p-8 md:p-12 rounded-[40px] border border-amber-500/10">
+                    <h3 class="serif text-3xl text-amber-400 italic mb-8">Soundscape Profile: The 200Hz Resonance</h3>
+                    
+                    <div class="grid md:grid-cols-2 gap-12 text-left">
+                        <div>
+                            <h4 class="text-xs uppercase tracking-widest text-amber-500 font-black mb-4">Biological Signature</h4>
+                            <p class="text-sm text-amber-100/80 leading-relaxed font-light mb-6">
+                                The Hive Resonance captures the collective 230Hz–270Hz wing-beat frequency of a resting colony. Unlike synthetic white noise, this biological soundscape features a natural, organic pulse that aligns with human circadian rhythms.
+                            </p>
+                            <h4 class="text-xs uppercase tracking-widest text-amber-500 font-black mb-4">Neural Benefits</h4>
+                            <p class="text-sm text-amber-100/80 leading-relaxed font-light">
+                                This steady drone encourages the brain to shift from Beta (alert) into Alpha and Theta waves. This process, known as neural entrainment, facilitates deep relaxation and faster onset of sleep.
+                            </p>
+                        </div>
+                        <div class="space-y-6">
+                            <div class="bg-amber-500/5 p-5 rounded-2xl border border-amber-500/10">
+                                <span class="text-[10px] uppercase font-black text-amber-500 block mb-1">Acoustic Type</span>
+                                <span class="text-amber-50 text-sm font-bold italic">Adaptive Low-Frequency Masking</span>
+                            </div>
+                            <div class="bg-amber-500/5 p-5 rounded-2xl border border-amber-500/10">
+                                <span class="text-[10px] uppercase font-black text-amber-500 block mb-1">Spectral Slope</span>
+                                <span class="text-amber-50 text-sm font-bold italic">-6dB per Octave (Brownian)</span>
+                            </div>
+                            <div class="bg-amber-500/5 p-5 rounded-2xl border border-amber-500/10">
+                                <span class="text-[10px] uppercase font-black text-amber-500 block mb-1">Primary Use</span>
+                                <span class="text-amber-50 text-sm font-bold italic">Tinnitus Suppression & Deep Sleep</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -109,18 +111,11 @@
         <footer class="py-32 px-6 text-center">
             <div class="max-w-xl mx-auto glass-amber p-12 rounded-[50px] mb-20 shadow-xl">
                 <h2 class="serif text-4xl mb-6 italic text-amber-50">Support the Colony</h2>
-                <p class="text-amber-100/70 text-base mb-10 font-light leading-relaxed">
-                    Our Hive Guardian program supports the health and winter-proofing of our Port Perry bees.
-                </p>
-                <a href="https://buymeacoffee.com/niba" target="_blank" class="inline-block px-12 py-5 bg-amber-400 text-black rounded-full font-bold uppercase tracking-widest text-xs hover:bg-white transition-all shadow-lg">
-                    Become a Hive Guardian
-                </a>
+                <p class="text-amber-100/70 text-base mb-10 font-light leading-relaxed">Our Hive Guardian program supports the health and winter-proofing of our Port Perry bees.</p>
+                <a href="https://buymeacoffee.com/niba" target="_blank" class="inline-block px-12 py-5 bg-amber-400 text-black rounded-full font-bold uppercase tracking-widest text-xs hover:bg-white transition-all shadow-lg">Become a Hive Guardian</a>
             </div>
-            
             <div class="flex flex-col gap-8">
-                <a href="https://mikestamper2017-design.github.io/NIBA/#trial" class="text-amber-400/80 text-xs uppercase tracking-[0.4em] font-bold hover:text-white transition-all underline decoration-amber-400/20">
-                    Switch to Niba Classic (Rain Canopy) →
-                </a>
+                <a href="https://mikestamper2017-design.github.io/NIBA/#trial" class="text-amber-400/80 text-xs uppercase tracking-[0.4em] font-bold hover:text-white transition-all underline decoration-amber-400/20">Switch to Niba Classic (Rain Canopy) →</a>
                 <p class="text-[10px] text-white/20 uppercase tracking-[0.5em] font-bold">&copy; 2026 NIBA APITHERAPY • PORT PERRY, ONTARIO</p>
             </div>
         </footer>
@@ -171,8 +166,7 @@
                 analyser.getByteFrequencyData(data);
                 let max = 0;
                 for (let i = 0; i < bars.length; i++) {
-                    let val = data[i * 4] || 0;
-                    if(val > max) max = val;
+                    let val = data[i * 4] || 0; if(val > max) max = val;
                     bars[i].style.height = Math.max(15, (val/255)*100) + '%';
                 }
                 if (max > 45) { gainNode.gain.setTargetAtTime(0.7, audioCtx.currentTime, 0.1); } 
