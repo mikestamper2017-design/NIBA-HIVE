@@ -56,6 +56,22 @@
         <section class="min-h-screen flex flex-col items-center justify-center px-6 pt-40 text-center">
             <h1 class="text-6xl md:text-8xl serif mb-6 text-amber-50 leading-tight">The Living <br><span class="italic text-amber-400">Resonance.</span></h1>
             <p class="text-amber-100/70 max-w-lg text-xl mb-12 font-light leading-relaxed">Rest within the frequency of the colony. A biologically-synced shield of sound from the heart of our hives.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-3xl mx-auto mb-16 text-left border-t border-amber-500/10 pt-12">
+                <div>
+                    <span class="text-[10px] font-bold tracking-[0.3em] text-amber-500/40 uppercase">01. Connect</span>
+                    <p class="text-sm text-amber-100/60 mt-2 font-light italic">Access the Hive Archive to begin the 200Hz biological drone.</p>
+                </div>
+                <div>
+                    <span class="text-[10px] font-bold tracking-[0.3em] text-amber-500/40 uppercase">02. Sync</span>
+                    <p class="text-sm text-amber-100/60 mt-2 font-light italic">Allow microphone access for Niba to monitor environmental noise levels.</p>
+                </div>
+                <div>
+                    <span class="text-[10px] font-bold tracking-[0.3em] text-amber-500/40 uppercase">03. Adapt</span>
+                    <p class="text-sm text-amber-100/60 mt-2 font-light italic">The resonance automatically scales its intensity to shield your rest.</p>
+                </div>
+            </div>
+
             <div class="animate-bounce text-amber-500/50 text-xs tracking-[0.4em] uppercase font-bold">Scroll to Connect</div>
         </section>
 
@@ -126,7 +142,7 @@
         const toggle = document.getElementById('mainToggle');
         const viz = document.getElementById('visualizer');
         const players = [new Audio('hive-hum.mp3'), new Audio('hive-hum.mp3')];
-        players.forEach(p => { p.crossOrigin = "anonymous"; p.preload = "auto"; });
+        players.forEach(p => { p.crossOrigin = "anonymous"; p.preload = "auto"; p.loop = false; });
 
         for(let i=0; i < 15; i++) {
             let bar = document.createElement('div');
@@ -139,15 +155,23 @@
         async function initAudio() {
             audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            
             const s1 = audioCtx.createMediaElementSource(players[0]);
             const s2 = audioCtx.createMediaElementSource(players[1]);
+            
             analyser = audioCtx.createAnalyser();
+            // SMOOTHING: Prevents jittery visuals and volume spikes
+            analyser.smoothingTimeConstant = 0.85; 
+
             mic = audioCtx.createMediaStreamSource(stream);
             gainNode = audioCtx.createGain();
             script = audioCtx.createScriptProcessor(2048, 1, 1);
+            
             s1.connect(gainNode); s2.connect(gainNode);
             gainNode.connect(audioCtx.destination);
-            mic.connect(analyser); analyser.connect(script);
+            
+            mic.connect(analyser); 
+            analyser.connect(script);
             script.connect(audioCtx.destination);
             
             const loop = (idx) => {
@@ -160,17 +184,28 @@
                 };
             };
             loop(0);
+
+            // Baseline gain
             gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
+
             script.onaudioprocess = () => {
                 const data = new Uint8Array(analyser.frequencyBinCount);
                 analyser.getByteFrequencyData(data);
+                
                 let max = 0;
                 for (let i = 0; i < bars.length; i++) {
-                    let val = data[i * 4] || 0; if(val > max) max = val;
+                    let val = data[i * 4] || 0; 
+                    if(val > max) max = val;
                     bars[i].style.height = Math.max(15, (val/255)*100) + '%';
                 }
-                if (max > 45) { gainNode.gain.setTargetAtTime(0.7, audioCtx.currentTime, 0.1); } 
-                else { gainNode.gain.setTargetAtTime(0.2, audioCtx.currentTime, 1.2); }
+
+                // SUBTLETY LOGIC: Threshold of 55 for room noise. 
+                // Uses setTargetAtTime to glide between volumes over 0.5s to 1.0s.
+                if (max > 55) { 
+                    gainNode.gain.setTargetAtTime(0.7, audioCtx.currentTime, 0.5); 
+                } else { 
+                    gainNode.gain.setTargetAtTime(0.2, audioCtx.currentTime, 1.0); 
+                }
             };
         }
 
