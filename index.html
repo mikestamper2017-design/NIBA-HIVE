@@ -83,7 +83,16 @@
                         <button onclick="setMode('recorded')" id="recordedBtn" class="py-4 rounded-full border border-amber-500/60 text-xs tracking-widest uppercase bg-amber-500/20 text-amber-100 font-bold transition-all">Hive Archive (Adaptive)</button>
                         <button onclick="setMode('live')" id="liveBtn" class="py-4 rounded-full border border-white/10 text-xs tracking-widest uppercase opacity-40 font-bold">Listen Live (Guardians Only)</button>
                     </div>
-                    <button id="mainToggle" class="w-full py-6 bg-amber-400 text-black rounded-full font-black uppercase tracking-widest hover:bg-white transition-all text-sm">Connect to Hive</button>
+                    <div class="mb-8 pt-6 border-t border-amber-500/10">
+    <label class="text-[10px] tracking-[0.3em] uppercase text-amber-500/50 font-bold mb-4 block">Dormancy Timer (Mins)</label>
+    <div class="flex justify-center gap-3">
+        <button onclick="setTimer(15)" id="t15" class="timer-btn text-[11px] w-10 h-10 rounded-full border border-amber-500/20 flex items-center justify-center hover:bg-amber-500/10 transition-all font-bold text-amber-200/60">15</button>
+        <button onclick="setTimer(30)" id="t30" class="timer-btn text-[11px] w-10 h-10 rounded-full border border-amber-500/20 flex items-center justify-center hover:bg-amber-500/10 transition-all font-bold text-amber-200/60">30</button>
+        <button onclick="setTimer(60)" id="t60" class="timer-btn text-[11px] w-10 h-10 rounded-full border border-amber-500/20 flex items-center justify-center hover:bg-amber-500/10 transition-all font-bold text-amber-200/60">60</button>
+        <button onclick="setTimer(0)" id="tOff" class="timer-btn text-[10px] px-4 h-10 rounded-full border border-amber-500/20 flex items-center justify-center bg-amber-500/10 text-amber-400 font-bold uppercase tracking-widest">Off</button>
+    </div>
+    <p id="timerDisplay" class="text-[10px] text-amber-500/60 mt-4 uppercase tracking-[0.2em] font-bold hidden italic">The Colony will sleep in: <span id="timeLeft" class="text-amber-400">0</span>m</p>
+</div>                    <button id="mainToggle" class="w-full py-6 bg-amber-400 text-black rounded-full font-black uppercase tracking-widest hover:bg-white transition-all text-sm">Connect to Hive</button>
                     <p id="status" class="mt-6 text-[11px] uppercase tracking-widest text-amber-500/70 font-black">Status: Offline</p>
                 </div>
             </div>
@@ -138,6 +147,10 @@
     </main>
 
     <script>
+        let audioCtx, analyser, mic, gainNode, script;
+let timerInterval;
+let minutesLeft = 0;
+const toggle = document.getElementById('mainToggle');
         let audioCtx, analyser, mic, gainNode, script;
         const toggle = document.getElementById('mainToggle');
         const viz = document.getElementById('visualizer');
@@ -222,6 +235,49 @@
                 alert("The Live Stream from Port Perry is currently offline for the winter. Live feeds resume with the spring nectar flow for our Hive Guardians.");
             }
         }
+        function setTimer(mins) {
+    // Reset amber button visuals
+    document.querySelectorAll('.timer-btn').forEach(b => {
+        b.classList.remove('bg-amber-500/30', 'border-amber-500/50');
+        b.classList.add('text-amber-200/60');
+    });
+    
+    minutesLeft = mins;
+    const display = document.getElementById('timerDisplay');
+    
+    if (mins === 0) {
+        clearInterval(timerInterval);
+        display.classList.add('hidden');
+        document.getElementById('tOff').classList.add('bg-amber-500/30');
+        return;
+    }
+
+    // Highlight active amber button
+    const activeBtn = document.getElementById('t' + mins);
+    activeBtn.classList.add('bg-amber-500/30', 'border-amber-500/50');
+    activeBtn.classList.remove('text-amber-200/60');
+    
+    display.classList.remove('hidden');
+    document.getElementById('timeLeft').innerText = minutesLeft;
+
+    clearInterval(timerInterval);
+    timerInterval = setInterval(() => {
+        if (audioCtx && audioCtx.state === 'running') {
+            minutesLeft--;
+            document.getElementById('timeLeft').innerText = minutesLeft;
+            if (minutesLeft <= 0) { stopColony(); }
+        }
+    }, 60000); 
+}
+
+function stopColony() {
+    clearInterval(timerInterval);
+    if (gainNode) {
+        // Fade the hive hum out like it's drifting away
+        gainNode.gain.setTargetAtTime(0, audioCtx.currentTime, 2.0);
+        setTimeout(() => { location.reload(); }, 4000);
+    }
+}
     </script>
 </body>
 </html>
