@@ -147,12 +147,21 @@
     </main>
 
     <script>
-        let audioCtx, analyser, mic, gainNode, script;
+let audioCtx, analyser, mic, gainNode, script;
+        let timerInterval;
+        let minutesLeft = 0;
+        
         const toggle = document.getElementById('mainToggle');
         const viz = document.getElementById('visualizer');
         const players = [new Audio('hive-hum.mp3'), new Audio('hive-hum.mp3')];
-        players.forEach(p => { p.crossOrigin = "anonymous"; p.preload = "auto"; p.loop = false; });
+        
+        players.forEach(p => { 
+            p.crossOrigin = "anonymous"; 
+            p.preload = "auto"; 
+            p.loop = false; 
+        });
 
+        // Initialize Visualizer Bars
         for(let i=0; i < 15; i++) {
             let bar = document.createElement('div');
             bar.className = 'honey-bar';
@@ -169,7 +178,6 @@
             const s2 = audioCtx.createMediaElementSource(players[1]);
             
             analyser = audioCtx.createAnalyser();
-            // SMOOTHING: Prevents jittery visuals and volume spikes
             analyser.smoothingTimeConstant = 0.85; 
 
             mic = audioCtx.createMediaStreamSource(stream);
@@ -194,7 +202,6 @@
             };
             loop(0);
 
-            // Baseline gain
             gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
 
             script.onaudioprocess = () => {
@@ -208,8 +215,6 @@
                     bars[i].style.height = Math.max(15, (val/255)*100) + '%';
                 }
 
-                // SUBTLETY LOGIC: Threshold of 55 for room noise. 
-                // Uses setTargetAtTime to glide between volumes over 0.5s to 1.0s.
                 if (max > 55) { 
                     gainNode.gain.setTargetAtTime(0.7, audioCtx.currentTime, 0.5); 
                 } else { 
@@ -231,49 +236,46 @@
                 alert("The Live Stream from Port Perry is currently offline for the winter. Live feeds resume with the spring nectar flow for our Hive Guardians.");
             }
         }
+
         function setTimer(mins) {
-    // Reset amber button visuals
-    document.querySelectorAll('.timer-btn').forEach(b => {
-        b.classList.remove('bg-amber-500/30', 'border-amber-500/50');
-        b.classList.add('text-amber-200/60');
-    });
-    
-    minutesLeft = mins;
-    const display = document.getElementById('timerDisplay');
-    
-    if (mins === 0) {
-        clearInterval(timerInterval);
-        display.classList.add('hidden');
-        document.getElementById('tOff').classList.add('bg-amber-500/30');
-        return;
-    }
+            document.querySelectorAll('.timer-btn').forEach(b => {
+                b.classList.remove('bg-amber-500/30', 'border-amber-500/50');
+                b.classList.add('text-amber-200/60');
+            });
+            
+            minutesLeft = mins;
+            const display = document.getElementById('timerDisplay');
+            
+            if (mins === 0) {
+                clearInterval(timerInterval);
+                display.classList.add('hidden');
+                document.getElementById('tOff').classList.add('bg-amber-500/30');
+                return;
+            }
 
-    // Highlight active amber button
-    const activeBtn = document.getElementById('t' + mins);
-    activeBtn.classList.add('bg-amber-500/30', 'border-amber-500/50');
-    activeBtn.classList.remove('text-amber-200/60');
-    
-    display.classList.remove('hidden');
-    document.getElementById('timeLeft').innerText = minutesLeft;
-
-    clearInterval(timerInterval);
-    timerInterval = setInterval(() => {
-        if (audioCtx && audioCtx.state === 'running') {
-            minutesLeft--;
+            const activeBtn = document.getElementById('t' + mins);
+            activeBtn.classList.add('bg-amber-500/30', 'border-amber-500/50');
+            activeBtn.classList.remove('text-amber-200/60');
+            
+            display.classList.remove('hidden');
             document.getElementById('timeLeft').innerText = minutesLeft;
-            if (minutesLeft <= 0) { stopColony(); }
-        }
-    }, 60000); 
-}
 
-function stopColony() {
-    clearInterval(timerInterval);
-    if (gainNode) {
-        // Fade the hive hum out like it's drifting away
-        gainNode.gain.setTargetAtTime(0, audioCtx.currentTime, 2.0);
-        setTimeout(() => { location.reload(); }, 4000);
-    }
-}
-    </script>
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                if (audioCtx && audioCtx.state === 'running') {
+                    minutesLeft--;
+                    document.getElementById('timeLeft').innerText = minutesLeft;
+                    if (minutesLeft <= 0) { stopColony(); }
+                }
+            }, 60000); 
+        }
+
+        function stopColony() {
+            clearInterval(timerInterval);
+            if (gainNode) {
+                gainNode.gain.setTargetAtTime(0, audioCtx.currentTime, 2.0);
+                setTimeout(() => { location.reload(); }, 4000);
+            }
+        }    </script>
 </body>
 </html>
