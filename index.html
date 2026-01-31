@@ -191,16 +191,45 @@ let audioCtx, analyser, mic, gainNode, script;
             analyser.connect(script);
             script.connect(audioCtx.destination);
             
-            const loop = (idx) => {
-                players[idx].play();
-                players[idx].ontimeupdate = () => {
-                    if (players[idx].duration - players[idx].currentTime < 0.4) {
-                        players[idx].ontimeupdate = null;
-                        loop(1 - idx);
+            // IMPROVED SEAMLESS LOOP
+            const playLoop = (currentIdx) => {
+                const nextIdx = 1 - currentIdx;
+                players[currentIdx].play();
+
+                // When we get near the end, start the next player
+                const checkTime = () => {
+                    if (players[currentIdx].duration - players[currentIdx].currentTime < 0.3) {
+                        players[nextIdx].play();
+                        players[currentIdx].removeEventListener('timeupdate', checkTime);
+                        playLoop(nextIdx); // Hand over the baton
                     }
                 };
+                players[currentIdx].addEventListener('timeupdate', checkTime);
             };
-            loop(0);
+            
+            playLoop(0);
+
+            gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
+
+            script.onaudioprocess = () => {
+                const data = new Uint8Array(analyser.frequencyBinCount);
+                analyser.getByteFrequencyData(data);
+                
+                let max = 0;
+                for (let i = 0; i < bars.length; i++) {
+                    let val = data[i * 4] || 0; 
+                    if(val > max) max = val;
+                    bars[i].style.height = Math.max(15, (val/255)*100) + '%';
+                }
+
+                // Subtlety Logic remains the same
+                if (max > 55) { 
+                    gainNode.gain.setTargetAtTime(0.7, audioCtx.currentTime, 0.5); 
+                } else { 
+                    gainNode.gain.setTargetAtTime(0.2, audioCtx.currentTime, 1.0); 
+                }
+            };
+        }
 
             gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
 
